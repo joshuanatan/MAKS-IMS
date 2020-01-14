@@ -198,7 +198,7 @@ class User extends CI_Controller{
         );
         updateRow("tbl_user",$data,$where);
     
-        $this->session->set_flashdata("status","success");
+        $this->session->set_flashdata("status","error");
         $this->session->set_flashdata("msg","Data is successfully deactivated");
         redirect("user");
     }
@@ -213,8 +213,8 @@ class User extends CI_Controller{
         );
         updateRow("tbl_user",$data,$where);
     
-        $this->session->set_flashdata("status","success");
-        $this->session->set_flashdata("msg","Data is successfully deactivated");
+        $this->session->set_flashdata("status","error");
+        $this->session->set_flashdata("msg","Data is successfully deleted");
         redirect("user");
     }
     public function activate($id_submit_user){

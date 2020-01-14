@@ -106,7 +106,7 @@ class Token extends CI_Controller{
             "tgl_token_last_modified" => date("Y-m-d H:i:s"),
         );
         updateRow("tbl_token",$data,$where);
-        $this->session->set_flashdata("status","success");
+        $this->session->set_flashdata("status","error");
         $this->session->set_flashdata("msg","Data is successfully deactivated");
         redirect("token");
     }
@@ -120,8 +120,8 @@ class Token extends CI_Controller{
             "tgl_token_last_modified" => date("Y-m-d H:i:s"),
         );
         updateRow("tbl_token",$data,$where);
-        $this->session->set_flashdata("status","success");
-        $this->session->set_flashdata("msg","Data is successfully deactivated");
+        $this->session->set_flashdata("status","error");
+        $this->session->set_flashdata("msg","Data is successfully deleted");
         redirect("token");
     }
     public function activate($id_submit_token){

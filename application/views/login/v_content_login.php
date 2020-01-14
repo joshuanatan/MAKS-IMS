@@ -16,7 +16,7 @@
     <div class = "col-lg-6 offset-lg-3">
         <form action = "<?php echo base_url();?>welcome/auth" method = "POST">
             <div class = "form-group">
-                <h5>Username</h5>
+                <h5>User Email</h5>
                 <input type = "text" name = "email_user" class = "form-control">
             </div>
             <div class = "form-group">
