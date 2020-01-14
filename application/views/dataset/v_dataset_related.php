@@ -58,7 +58,7 @@
                     </select>
                 </div>
                 <div class = "form-group">
-                    <h5>Dataset Detail</h5>
+                    <h5>Selected Dataset Detail</h5>
                     <table class = "table table-stripped table-hover table-bordered">
                         <tr>
                             <th style = "width:20%">ID Dataset</th>

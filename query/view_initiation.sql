@@ -23,7 +23,11 @@ tgl_entity_combination_last_modified,
 id_user_entity_combination_last_modified,
 id_submit_dataset,
 tgl_dataset_last_modified,
-id_user_dataset_last_modified from tbl_dataset join tbl_entity_combination on tbl_entity_combination.id_submit_entity_combination = tbl_dataset.id_entity_combination  left join tbl_entity_combination_list on tbl_entity_combination_list.id_entity_combination = tbl_entity_combination.id_submit_entity_combination left join tbl_entity on tbl_entity.id_submit_entity = tbl_entity_combination_list.id_entity;
+id_user_dataset_last_modified 
+from tbl_dataset 
+join tbl_entity_combination on tbl_entity_combination.id_submit_entity_combination = tbl_dataset.id_entity_combination  
+left join tbl_entity_combination_list on tbl_entity_combination_list.id_entity_combination = tbl_entity_combination.id_submit_entity_combination 
+left join tbl_entity on tbl_entity.id_submit_entity = tbl_entity_combination_list.id_entity;
 
 drop view v_endpoint_intent_dataset_mapping;
 CREATE  VIEW `v_endpoint_intent_dataset_mapping`  AS  
@@ -46,7 +50,8 @@ tgl_dataset_last_modified,
 db_name
 from (
     v_entity_dataset_mapping join tbl_db_connection on tbl_db_connection.id_submit_db_connection = v_entity_dataset_mapping.id_db_connection
-) 
+)
+where status_aktif_entity_combination_list = 1 and v_entity_dataset_mapping.status_aktif_entity = 1
 group by id_submit_entity_combination ;
 
 

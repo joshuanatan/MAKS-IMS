@@ -55,7 +55,6 @@
                                 <div class = "form-group">
                                     <h5>Which user intention do you want to answer with this query?</h5>
                                     <select class = "form-control" name = "intent" data-plugin ="select2">
-                                        <option value = "0">Not an answer, Just a supporting information</option>
                                         <?php for($a =0; $a<count($intent); $a++):?>
                                         <option value = "<?php echo $intent[$a]["id_submit_entity"];?>"><?php echo $intent[$a]["entity"];?></option>
                                         <?php endfor;?>

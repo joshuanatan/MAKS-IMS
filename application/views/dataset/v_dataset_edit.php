@@ -47,9 +47,8 @@
                                             </div>
                                             <div class = "modal-body" style = 'max-height: calc(100vh - 210px);overflow-y: auto;'>
                                                 <div class = "form-group">
-                                                    <h5>New Intent</h5>
+                                                    <h5>What user's intention does this dataset provide?</h5>
                                                     <select class = "form-control" name = "intent" data-plugin ="select2">
-                                                        <option value = 0>Supporting Information</option>
                                                         <?php for($a =0; $a<count($intent); $a++):?>
                                                         <option value = "<?php echo $intent[$a]["id_submit_entity"];?>"<?php if(count($registered_intent)>0){if($registered_intent[0]["id_submit_entity"] == $intent[$a]["id_submit_entity"]) echo "selected";}?>><?php echo $intent[$a]["entity"];?></option>
                                                         <?php endfor;?>

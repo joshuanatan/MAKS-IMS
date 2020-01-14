@@ -39,6 +39,7 @@ class Dataset extends CI_Controller{
         $where = array(
             "id_entity_combination" => $id_entity_combination
         );
+        $where += ["status_aktif_entity" => 1];
         $field = array(
             "entity","entity_category"
         );

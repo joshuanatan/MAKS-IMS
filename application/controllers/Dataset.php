@@ -359,9 +359,56 @@ class dataset extends CI_Controller{
 
         $this->load->view("dataset/v_dataset_js",$entity);
     }
+    private function update_mapping($id_combination, $delete_checks,$intent,$add_checks){
+        if($delete_checks !=""){
+            foreach($delete_checks as $a){
+                //echo $a;
+                $where = array(
+                    "id_submit_entity_combination_list" => $a
+                );
+                #delete aja toh ga bisa di recover
+                deleteRow("tbl_entity_combination_list",$where);
+            }
+        }
+        if($intent != ""){
+            $where = array(
+                "id_entity" => $intent,
+                "id_entity_combination" => $id_combination,
+                "status_aktif_entity_combination_list" => 1,
+            );
+            $field = array(
+                "id_entity"
+            );
+            $result = selectRow("tbl_entity_combination_list",$where,$field);
+            if(!$result->num_rows() > 0){
+                $data = array(
+                    "id_entity" => $intent,
+                    "id_entity_combination" => $id_combination,
+                    "status_aktif_entity_combination_list" => 1,
+                    "tgl_entity_combination_list_last_modified" =>date("Y-m-d H:i:s"),
+                    "id_user_entity_combination_list_last_modified" => $this->session->id_user
+                );
+                insertRow("tbl_entity_combination_list",$data);
+            }
+        }
+        if($add_checks != ""){
+            foreach($add_checks as $a){
+                #semua bisa masuk karena itu justru yang bkin unik.
+                #permintaan 1 intent dan 2 entity bisa jadi perbandingan
+                #beda dengan permintaan 1 intent dan 1 entiity mungkin cuman minta barang
+                $data = array(
+                    "id_entity" => $this->input->post("entity".$a),
+                    "id_entity_combination" => $id_combination,
+                    "status_aktif_entity_combination_list" => 1,
+                    "tgl_entity_combination_list_last_modified" =>date("Y-m-d H:i:s"),
+                    "id_user_entity_combination_list_last_modified" => $this->session->id_user
+                );
+                insertRow("tbl_entity_combination_list",$data);
+            }
+        }
+    }
     public function update(){
         $this->check_session();
-        $id_combination = $this->input->post("id_submit_entity_combination");
 
         $config = array(
             array(
@@ -375,60 +422,15 @@ class dataset extends CI_Controller{
                 "rules" => "required"
             ),
         );
+        
         $this->form_validation->set_rules($config);
         if($this->form_validation->run()){
-            /** Menonaktifkan semua entity combination list */
-            $checks = $this->input->post("delete_registered_entity_check");
-            if($checks !=""){
-                foreach($checks as $a){
-                    $where = array(
-                        "id_submit_entity_combination_list" => $a
-                    );
-                    $data = array(
-                        "status_aktif_entity_combination_list" => 0,
-                        "tgl_entity_combination_list_last_modified" => date("Y-m-d H:i:S"),
-                        "id_user_entity_combination_list_last_modified" => $this->session->id_user
-                    );
-                    updateRow("tbl_entity_combination_list",$data,$where);
-                }
-            }
-            /**memasukan intent */
-            $where = array(
-                "id_entity" => $this->input->post("intent"),
-                "id_entity_combination" => $id_combination,
-                "status_aktif_entity_combination_list" => 1,
-            );
-            if(isExistsInTable("tbl_entity_combination_list",$where) == 1){ //kalau ga ad
-                $data = array(
-                    "id_entity" => $this->input->post("intent"),
-                    "id_entity_combination" => $id_combination,
-                    "status_aktif_entity_combination_list" => 1,
-                    "tgl_entity_combination_list_last_modified" =>date("Y-m-d H:i:s"),
-                    "id_user_entity_combination_list_last_modified" => $this->session->id_user
-                );
-                insertRow("tbl_entity_combination_list",$data);
-            }
-            /**memasukan entity */
-            $checks = $this->input->post("checks");
-            if($checks != ""){
-                foreach($checks as $a){
-                    $where = array(
-                        "id_entity" => $this->input->post("entity".$a),
-                        "id_entity_combination" => $id_combination,
-                        "status_aktif_entity_combination_list" => 1,
-                    );
-                    if(isExistsInTable("tbl_entity_combination_list",$where) == 1){ //di cek dlu mencegah dobel
-                        $data = array(
-                            "id_entity" => $this->input->post("entity".$a),
-                            "id_entity_combination" => $id_combination,
-                            "status_aktif_entity_combination_list" => 1,
-                            "tgl_entity_combination_list_last_modified" =>date("Y-m-d H:i:s"),
-                            "id_user_entity_combination_list_last_modified" => $this->session->id_user
-                        );
-                        insertRow("tbl_entity_combination_list",$data);
-                    }
-                }
-            }
+            
+            $id_combination = $this->input->post("id_submit_entity_combination");
+            $delete_checks = $this->input->post("delete_registered_entity_check");
+            $intent = $this->input->post("intent");
+            $add_checks = $this->input->post("checks");
+            $this->update_mapping($id_combination,$delete_checks,$intent,$add_checks);
         }
         $config = array(
             array(
@@ -484,9 +486,9 @@ class dataset extends CI_Controller{
             );
             updateRow("tbl_dataset",$data,$where);
     
-            $db_field_last_modified = $this->input->post("db_field_last_modified");
-            if($db_field_last_modified != ""){
-                foreach($db_field_last_modified as $a){
+            $db_field_edit = $this->input->post("db_field_edit");
+            if($db_field_edit != ""){
+                foreach($db_field_edit as $a){
                     $where = array(
                         "id_submit_dataset_dbfield_mapping" => $a
                     );
