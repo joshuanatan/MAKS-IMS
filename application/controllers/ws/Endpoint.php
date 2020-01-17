@@ -95,34 +95,48 @@ class Endpoint extends CI_Controller{
                             "db_hostname","db_username","db_password","db_name"
                         );
                         $result = selectRow("tbl_db_connection",$where,$field)->row();
-                        $config = array(
-                            "hostname" => $result->db_hostname,
-                            "username" => $result->db_username,
-                            "password" => $this->encryption->decrypt($result->db_password),
-                            "database" => $result->db_name,
-                            "dbdriver" => "mysqli",
-                        );
-                        $db1 = $this->load->database($config,true);
-                        $query_result = $db1->query($query)->result_array();
+                        $servername = $result->db_hostname;
+                        $username = $result->db_username;
+                        $password = $this->encryption->decrypt($result->db_password);
                         
-                        $where = array(
-                            "id_dataset" => $dataset_detail["main"][$a]["id_submit_dataset"],
-                            "status_aktif_dataset_dbfield_mapping" => 1
-                        );
-                        $field = array(
-                            "db_field","db_field_alias"
-                        );
-                        $db_field = selectRow("tbl_dataset_dbfield_mapping",$where,$field)->result_array();
-                        $dataset_result = array(
-                            "dataset_name" => $dataset_detail["main"][$a]["dataset_key"],
-                            "dataset_desc" => $dataset_detail["main"][$a]["dataset_name"],
-                            "is_answer" => "true",
-                            "value" => array(
-                                "header" => $db_field,
-                                "content" => $query_result,
-                            )
-                        );
-                        array_push($dataset_result_list,$dataset_result);
+                        // Create connection
+                        $conn = new mysqli($servername, $username, $password);
+                        
+                        // Check connection
+                        if ($conn->connect_error) {
+                        }
+                        else{
+                            $config = array(
+                                "hostname" => $result->db_hostname,
+                                "username" => $result->db_username,
+                                "password" => $this->encryption->decrypt($result->db_password),
+                                "database" => $result->db_name,
+                                "dbdriver" => "mysqli",
+                            );
+                            $db1 = $this->load->database($config,true);
+                            $query_result = $db1->query($query);
+                            if($query_result){
+                                $query_result = $query_result->result_array();
+                                $where = array(
+                                    "id_dataset" => $dataset_detail["main"][$a]["id_submit_dataset"],
+                                    "status_aktif_dataset_dbfield_mapping" => 1
+                                );
+                                $field = array(
+                                    "db_field","db_field_alias"
+                                );
+                                $db_field = selectRow("tbl_dataset_dbfield_mapping",$where,$field)->result_array();
+                                $dataset_result = array(
+                                    "dataset_name" => $dataset_detail["main"][$a]["dataset_key"],
+                                    "dataset_desc" => $dataset_detail["main"][$a]["dataset_name"],
+                                    "is_answer" => "true",
+                                    "value" => array(
+                                        "header" => $db_field,
+                                        "content" => $query_result,
+                                    )
+                                );
+                                array_push($dataset_result_list,$dataset_result);
+                            }
+                        }
                     }
                     
                     for($a = 0; $a<count($dataset_detail["support"]); $a++){
@@ -137,33 +151,52 @@ class Endpoint extends CI_Controller{
                             "db_hostname","db_username","db_password","db_name"
                         );
                         $result = selectRow("tbl_db_connection",$where,$field)->row();
-                        $config = array(
-                            "hostname" => $result->db_hostname,
-                            "username" => $result->db_username,
-                            "password" => $this->encryption->decrypt($result->db_password),
-                            "database" => $result->db_name,
-                            "dbdriver" => "mysqli",
-                        );
-                        $db1 = $this->load->database($config,true);
-                        $query_result = $db1->query($query)->result_array();
                         
-                        $where = array(
-                            "id_dataset" => $dataset_detail["support"][$a]["id_submit_dataset"],
-                            "status_aktif_dataset_dbfield_mapping" => 1
-                        );
-                        $field = array(
-                            "db_field","db_field_alias"
-                        );
-                        $db_field = selectRow("tbl_dataset_dbfield_mapping",$where,$field)->result_array();
-                        $dataset_result = array(
-                            "dataset_name" => $dataset_detail["support"][$a]["dataset_key"],
-                            "dataset_desc" => $dataset_detail["support"][$a]["dataset_name"],
-                            "value" => array(
-                                "header" => $db_field,
-                                "content" => $query_result,
-                            )
-                        );
-                        array_push($dataset_result_list,$dataset_result);
+                        $servername = $result->db_hostname;
+                        $username = $result->db_username;
+                        $password = $this->encryption->decrypt($result->db_password);
+                        
+                        // Create connection
+                        $conn = new mysqli($servername, $username, $password);
+                        
+                        // Check connection
+                        if ($conn->connect_error) {
+                        }
+                        else{
+                            $conn->close();
+                            $config = array(
+                                "hostname" => $result->db_hostname,
+                                "username" => $result->db_username,
+                                "password" => $this->encryption->decrypt($result->db_password),
+                                "database" => $result->db_name,
+                                "dbdriver" => "mysqli",
+                            );
+                            $db1 = $this->load->database($config,true);
+                            $query_result = $db1->query($query);
+                            if($query_result){
+                                $query_result = $query_result->result_array();
+                                $where = array(
+                                    "id_dataset" => $dataset_detail["support"][$a]["id_submit_dataset"],
+                                    "status_aktif_dataset_dbfield_mapping" => 1
+                                );
+                                $field = array(
+                                    "db_field","db_field_alias"
+                                );
+                                $db_field = selectRow("tbl_dataset_dbfield_mapping",$where,$field);
+                                $db_field = $db_field->result_array();
+                                $dataset_result = array(
+                                    "dataset_name" => $dataset_detail["support"][$a]["dataset_key"],
+                                    "dataset_desc" => $dataset_detail["support"][$a]["dataset_name"],
+                                    "value" => array(
+                                        "header" => $db_field,
+                                        "content" => $query_result,
+                                    )
+                                );
+                                array_push($dataset_result_list,$dataset_result);
+                            }
+                            
+                        }
+                        
                     }
                     $data = array(
                         "status" => "success",
