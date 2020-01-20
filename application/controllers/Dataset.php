@@ -198,7 +198,7 @@ class dataset extends CI_Controller{
                     );
                     insertRow("tbl_dataset_dbfield_mapping",$data);
                 }
-                $msg = "Dataset is successfully updated to database";
+                $msg = "Dataset is successfully saved to database";
                 $this->session->set_flashdata("status_dataset","success");
                 $this->session->set_flashdata("msg_dataset",$msg);
                 redirect("dataset");

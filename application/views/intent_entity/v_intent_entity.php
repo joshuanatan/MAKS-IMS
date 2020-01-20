@@ -47,7 +47,7 @@
                         <?php endif;?>
                     </td>
                     <td style = "overflow-wrap:break-word">
-                        <button type = "button" class = "btn btn-primary btn-sm col-lg-12" data-toggle = "modal" data-target = "#updateIntent<?php echo $a;?>">EDIT INTENT</button>
+                        <button type = "button" class = "btn btn-primary btn-sm col-lg-12" data-toggle = "modal" data-target = "#updateIntent<?php echo $a;?>">EDIT</button>
                         
                         <?php if($entity[$a]["status_aktif_entity"] == 1):?>
                         <a href = "<?php echo base_url();?>intent_entity/deactive/<?php echo $entity[$a]["id_submit_entity"];?>" class = "btn btn-danger btn-sm col-lg-12">DEACTIVE</a>

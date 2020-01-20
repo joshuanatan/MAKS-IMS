@@ -177,7 +177,7 @@ class Intent_entity extends CI_Controller{
             "id_user_entity_last_modified" => $this->session->id_user
         );
         updateRow("tbl_entity",$data,$where);
-        $msg = "Data is successfully deactivated";
+        $msg = "Data is successfully activated";
         $this->session->set_flashdata("status_intent_entity","success");
         $this->session->set_flashdata("msg_intent_entity",$msg);
         redirect("intent_entity");
