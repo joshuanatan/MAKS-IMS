@@ -1,6 +1,8 @@
 <?php
 date_default_timezone_set("Asia/Bangkok");
 class dataset extends CI_Controller{
+    private $get_dataset_trial_url = "http://127.0.0.1:8888/project/maks/maks_km/ws/endpoint/get_dataset";
+    private $get_dataset_trial_token = "f6caf2d0d7affe8a9cbb0e430d20c2de";
     public function __construct(){
         parent::__construct();
         $config = array(
@@ -618,6 +620,31 @@ class dataset extends CI_Controller{
 			$this->session->set_flashdata("msg_login",$msg);
 			redirect("welcome");
 		}
-	}
+    }
+    public function trial(){
+        $data["intent"] = $this->input->post("intent");
+        $entity_check = $this->input->post("check");
+        if($entity_check != ""){
+            foreach($entity_check as $a){
+                $entity = $this->input->post("entity".$a);
+                $value = $this->input->post("value".$a);
+                //echo $value;
+                $data["entity"][$entity] = explode(",",$value);            
+            }
+        }
+        $encode = json_encode($data);
+        $url = $this->get_dataset_trial_url;
+        $header = array(
+            "client-token:".$this->get_dataset_trial_token
+        );
+        $body = array(
+            "text_entity_list" => $encode
+        );
+        $response = $this->curl->post($url,$header,$body);
+        header("content-type:application/json");
+        //echo $encode;
+        echo $response["response"];
+        
+    }
 }
 ?>

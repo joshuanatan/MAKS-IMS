@@ -19,7 +19,7 @@ class Curl{
         $response["err"] = curl_error($curl);
         return $response;
     }
-    public function post($url,$header="",$body){
+    public function post($url,$header=array(),$body){
         if($url == ""){
             echo "Need url";
             return false;
@@ -33,16 +33,17 @@ class Curl{
             CURLOPT_URL => $url,
             CURLOPT_ENCODING => "-",
             CURLOPT_RETURNTRANSFER => TRUE,
-            CURLOPT_ENCODING => "",
             CURLOPT_MAXREDIRS => 10,
             CURLOPT_TIMEOUT => 30,
             CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            CURLOPT_CUSTOMREQUEST =>"POST",
+            CURLOPT_POST => 1,
             CURLOPT_HTTPHEADER => $header,
-            CURLOPT_POSTFIELDS => $body
+            CURLOPT_POSTFIELDS => http_build_query($body)
         ));
-        $response = curl_exec($curl);
-        return json_decode($response,true);
+        
+        $response["response"] = curl_exec($curl);
+        $response["err"] = curl_error($curl);
+        return $response;
     }
 }
 ?>

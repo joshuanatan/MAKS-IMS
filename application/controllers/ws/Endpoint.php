@@ -51,11 +51,14 @@ class Endpoint extends CI_Controller{
                 if($result->num_rows() > 0){
                     $control = array();
                     $dataset_detail["main"] = $result->result_array();
+                    //print_r($dataset_detail["main"]);
+                    
                     $dataset_detail["support"] = array();
                     for($a = 0; $a<count($dataset_detail["main"]); $a++){
                         if(!in_array($dataset_detail["main"][$a]["dataset_key"],$control)){
                             //kalau di array control gak ada, masukin aja.
                             array_push($control,$dataset_detail["main"][$a]["dataset_key"]);
+                            
                         }
                         else{
                             //kalau ternyata udah ada somewhere(maybe kedobel atau dari support udah ada gitu, hilangin dari yang udah kedaftar di key main)
@@ -88,6 +91,7 @@ class Endpoint extends CI_Controller{
                         foreach($replace_array as $key=>$value){
                             $query = str_replace($key,$value,$query);
                         }
+                        //echo $query."\n";
                         $where = array(
                             "id_submit_db_connection" => $dataset_detail["main"][$a]["id_db_connection"]
                         );
@@ -111,11 +115,13 @@ class Endpoint extends CI_Controller{
                                 "username" => $result->db_username,
                                 "password" => $this->encryption->decrypt($result->db_password),
                                 "database" => $result->db_name,
-                                "dbdriver" => "mysqli",
+                                "dbdriver" => "mysqli"
                             );
                             $db1 = $this->load->database($config,true);
                             $query_result = $db1->query($query);
+                            
                             if($query_result){
+                                $dataset_detail["main"][$a]["dataset_key"];
                                 $query_result = $query_result->result_array();
                                 $where = array(
                                     "id_dataset" => $dataset_detail["main"][$a]["id_submit_dataset"],
@@ -135,6 +141,8 @@ class Endpoint extends CI_Controller{
                                     )
                                 );
                                 array_push($dataset_result_list,$dataset_result);
+                            }
+                            else{
                             }
                         }
                     }
@@ -194,7 +202,8 @@ class Endpoint extends CI_Controller{
                                 );
                                 array_push($dataset_result_list,$dataset_result);
                             }
-                            
+                            else{
+                            }
                         }
                         
                     }
@@ -236,63 +245,29 @@ class Endpoint extends CI_Controller{
         header("Content-type:application/json");
         echo json_encode($data);
     }
-    public function get_dataset_repository($last_pull_date){
-        $headers = getallheaders();
-        if(array_key_exists("client-token",$headers)){
-            $where = array(
-                "endpoint_name" => "get_dataset_repository",
-                "client_token" => $headers["client-token"]
-            );  
-            $field = array(
-                "endpoint_token"
+    public function get_dataset_list(){
+        $where = array(
+            "status_aktif_dataset" => 1
+        );
+        $field = array(
+            "dataset_key"
+        );
+        $result = selectRow("tbl_dataset",$where,$field);
+        if($result->num_rows() > 0){
+            $data = array(
+                "status" => "SUCCESS",
+                "msg" => "Dataset List Found",
+                "data" => $result->result_array()
             );
-            $result = selectRow("detail_endpoint_auth",$where,$field);
-            if($result->num_rows() > 0){
-                log_endpoint($headers["client-token"],get1Value("endpoint_documentation","endpoint_token",array("endpoint_name" => "get_dataset")),"success");
-                
-                $where = "tgl_dataset_add > '".urldecode($last_pull_date)."' or tgl_dataset_edit > '".urldecode($last_pull_date)."'";
-                $field = array(
-                    "id_submit_dataset",
-                    "dataset_key",
-                    "dataset_name",
-                );
-                $result = selectRow("tbl_dataset",$where,$field);
-                if($result->num_rows() > 0){
-                    $result_array = $result->result_array();
-                    
-                    $response = array(
-                        "status" => 'success',
-                        "msg" => "DATA FOUND",
-                        "result" => $result_array
-                    );
-                }
-                else{
-                    $response = array(
-                        "status" => 'error',
-                        "msg" => "DATA NOT FOUND",
-                        "result" => "-"
-                    );
-                }
-            }
-            else{
-                $response = array(
-                    "status" => 'error',
-                    "msg" => "TOKEN IS NOT ACTIVE / UNABLE TO RECOGNIZE TOKEN",
-                    "result" => ""
-                );
-                log_endpoint($headers["client-token"],get1Value("endpoint_documentation","endpoint_token",array("endpoint_name" => "get_dataset_repository")),"error","TOKEN IS NOT RECOGNIZED / NO PRIVILEGE IS GRANTED / ENDPOINT INACTIVE");
-            }
         }
         else{
-            $response = array(
-                "status" => 'error',
-                "msg" => "TOKEN IS REQUIRED",
-                "result" => ""
+            $data = array(
+                "error" => "true",
+                "status" => "ERROR",
+                "msg" => "Dataset List Not Found"
             );
-            log_endpoint("-",get1Value("endpoint_documentation","endpoint_token",array("endpoint_name" => "get_dataset_repository")),"error","CLIENT TOKEN IS NOT PROVIDED");
         }
-        header("content-type:application/json");
-        echo json_encode($response);
+        echo json_encode($data);
     }
 }
 ?>
