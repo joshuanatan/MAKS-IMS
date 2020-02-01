@@ -556,16 +556,18 @@ class dataset extends CI_Controller{
             "id_submit_dataset","dataset_key","dataset_name","dataset_query","id_submit_dataset_related"
         );
         $result = selectRow("v_related_dataset",$where,$field);
-        $data["registered_intent"] = $result->result_array();
+        $data["registered_related"] = $result->result_array();
 
         $where = array(
             "status_aktif_dataset" => 1,
-            "id_submit_dataset != " => $id_submit_dataset
+            "id_submit_dataset != " => $id_submit_dataset,
+            "id_submit_dataset not in (select id_dataset_related from tbl_dataset_related where id_dataset = ".$id_submit_dataset.")"
         );
         $field = array(
             "dataset_key","dataset_name","id_entity_combination"
         );
-        $result = selectRow("tbl_dataset",$where,$field);
+        $query = "select dataset_key,dataset_name,id_entity_combination from tbl_dataset where status_aktif_dataset = 1 and id_submit_dataset != ".$id_submit_dataset." and id_submit_dataset not in (select id_dataset_related from tbl_dataset_related where id_dataset = ".$id_submit_dataset.")";
+        $result = executeQuery($query);
         $data["dataset_list"] = $result->result_array();
 
         $this->page_generator->req();

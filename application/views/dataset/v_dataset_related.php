@@ -19,19 +19,19 @@
                 <th>Dataset Query</th>
             </thead>
             <tbody>
-                <?php for($a = 0; $a<count($registered_intent); $a++):?>
+                <?php for($a = 0; $a<count($registered_related); $a++):?>
                 <tr>
                     <td>
                         <div class = "checkbox-custom checkbox-primary">
-                            <input type = "checkbox" name = "checks[]" value = "<?php echo $registered_intent[$a]["id_submit_dataset_related"];?>">
+                            <input type = "checkbox" name = "checks[]" value = "<?php echo $registered_related[$a]["id_submit_dataset_related"];?>">
                             <label></label>
                         </div>
                     </td>
                     <td>
-                        <?php echo $registered_intent[$a]["dataset_key"];?><br/>
-                        <?php echo $registered_intent[$a]["dataset_name"];?>
+                        <?php echo $registered_related[$a]["dataset_key"];?><br/>
+                        <?php echo $registered_related[$a]["dataset_name"];?>
                     </td>
-                    <td><?php echo $registered_intent[$a]["dataset_query"];?></td>
+                    <td><?php echo $registered_related[$a]["dataset_query"];?></td>
                 </tr>
                 <?php endfor;?>
             </tbody>
