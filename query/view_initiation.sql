@@ -1,4 +1,4 @@
-
+drop view if exists v_entity_dataset_mapping;
 CREATE VIEW v_entity_dataset_mapping  AS  
 select id_submit_entity_combination,
 id_entity,
@@ -29,7 +29,7 @@ join tbl_entity_combination on tbl_entity_combination.id_submit_entity_combinati
 left join tbl_entity_combination_list on tbl_entity_combination_list.id_entity_combination = tbl_entity_combination.id_submit_entity_combination 
 left join tbl_entity on tbl_entity.id_submit_entity = tbl_entity_combination_list.id_entity;
 
-drop view v_endpoint_intent_dataset_mapping;
+drop view if exists  v_endpoint_intent_dataset_mapping;
 CREATE  VIEW `v_endpoint_intent_dataset_mapping`  AS  
 select 
 id_submit_entity_combination,
@@ -54,7 +54,7 @@ from (
 where status_aktif_entity_combination_list = 1 and v_entity_dataset_mapping.status_aktif_entity = 1
 group by id_submit_entity_combination ;
 
-
+drop view if exists v_detail_entity_mapping;
 CREATE VIEW v_detail_entity_mapping  AS  
 select id_submit_entity_combination_list AS id_submit_entity_combination_list,
 id_entity AS id_entity,
@@ -67,6 +67,7 @@ from (tbl_entity_combination_list
 join tbl_entity on((tbl_entity.id_submit_entity = tbl_entity_combination_list.id_entity))) 
 where ((tbl_entity.status_aktif_entity = 1) and (tbl_entity_combination_list.status_aktif_entity_combination_list = 1)) ;
 
+drop view if exists v_detail_dataset;
 CREATE VIEW v_detail_dataset  AS  
 select id_submit_dataset,
 dataset_name,
@@ -86,6 +87,7 @@ id_user_db_connection_last_modified
 from
  (tbl_dataset join tbl_db_connection on((tbl_db_connection.id_submit_db_connection = tbl_dataset.id_db_connection))) ;
  
+drop view if exists v_related_dataset;
 CREATE  VIEW v_related_dataset  AS  
 select 
 id_submit_dataset_related,

@@ -4,7 +4,7 @@ if ( ! function_exists('splitterMoney')){
         $split = explode($separator,$string);
         $result = "";
         for($a = 0; $a<count($split); $a++){
-            $result .= $split{$a};
+            $result .= $split[$a];
         }
         return $result;
     }   

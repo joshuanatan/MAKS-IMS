@@ -121,26 +121,27 @@ class Endpoint extends CI_Controller{
                             $query_result = $db1->query($query);
                             
                             if($query_result){
-                                $dataset_detail["main"][$a]["dataset_key"];
-                                $query_result = $query_result->result_array();
-                                $where = array(
-                                    "id_dataset" => $dataset_detail["main"][$a]["id_submit_dataset"],
-                                    "status_aktif_dataset_dbfield_mapping" => 1
-                                );
-                                $field = array(
-                                    "db_field","db_field_alias"
-                                );
-                                $db_field = selectRow("tbl_dataset_dbfield_mapping",$where,$field)->result_array();
-                                $dataset_result = array(
-                                    "dataset_name" => $dataset_detail["main"][$a]["dataset_key"],
-                                    "dataset_desc" => $dataset_detail["main"][$a]["dataset_name"],
-                                    "is_answer" => "true",
-                                    "value" => array(
-                                        "header" => $db_field,
-                                        "content" => $query_result,
-                                    )
-                                );
-                                array_push($dataset_result_list,$dataset_result);
+                                if($query_result->num_rows() > 0){
+                                    $query_result = $query_result->result_array();
+                                    $where = array(
+                                        "id_dataset" => $dataset_detail["main"][$a]["id_submit_dataset"],
+                                        "status_aktif_dataset_dbfield_mapping" => 1
+                                    );
+                                    $field = array(
+                                        "db_field","db_field_alias"
+                                    );
+                                    $db_field = selectRow("tbl_dataset_dbfield_mapping",$where,$field)->result_array();
+                                    $dataset_result = array(
+                                        "dataset_name" => $dataset_detail["main"][$a]["dataset_key"],
+                                        "dataset_desc" => $dataset_detail["main"][$a]["dataset_name"],
+                                        "is_answer" => "true",
+                                        "value" => array(
+                                            "header" => $db_field,
+                                            "content" => $query_result,
+                                        )
+                                    );
+                                    array_push($dataset_result_list,$dataset_result);
+                                }
                             }
                             else{
                             }
@@ -182,25 +183,27 @@ class Endpoint extends CI_Controller{
                             $db1 = $this->load->database($config,true);
                             $query_result = $db1->query($query);
                             if($query_result){
-                                $query_result = $query_result->result_array();
-                                $where = array(
-                                    "id_dataset" => $dataset_detail["support"][$a]["id_submit_dataset"],
-                                    "status_aktif_dataset_dbfield_mapping" => 1
-                                );
-                                $field = array(
-                                    "db_field","db_field_alias"
-                                );
-                                $db_field = selectRow("tbl_dataset_dbfield_mapping",$where,$field);
-                                $db_field = $db_field->result_array();
-                                $dataset_result = array(
-                                    "dataset_name" => $dataset_detail["support"][$a]["dataset_key"],
-                                    "dataset_desc" => $dataset_detail["support"][$a]["dataset_name"],
-                                    "value" => array(
-                                        "header" => $db_field,
-                                        "content" => $query_result,
-                                    )
-                                );
-                                array_push($dataset_result_list,$dataset_result);
+                                if($query_result->num_rows() > 0){
+                                    $query_result = $query_result->result_array();
+                                    $where = array(
+                                        "id_dataset" => $dataset_detail["support"][$a]["id_submit_dataset"],
+                                        "status_aktif_dataset_dbfield_mapping" => 1
+                                    );
+                                    $field = array(
+                                        "db_field","db_field_alias"
+                                    );
+                                    $db_field = selectRow("tbl_dataset_dbfield_mapping",$where,$field);
+                                    $db_field = $db_field->result_array();
+                                    $dataset_result = array(
+                                        "dataset_name" => $dataset_detail["support"][$a]["dataset_key"],
+                                        "dataset_desc" => $dataset_detail["support"][$a]["dataset_name"],
+                                        "value" => array(
+                                            "header" => $db_field,
+                                            "content" => $query_result,
+                                        )
+                                    );
+                                    array_push($dataset_result_list,$dataset_result);
+                                }
                             }
                             else{
                             }
