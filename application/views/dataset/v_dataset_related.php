@@ -50,7 +50,7 @@
             <div class = "modal-body" style = 'max-height: calc(100vh - 210px);overflow-y: auto;'>
                 <div class = "form-group">
                     <h5>Dataset Option</h5>
-                    <select class = "form-control" id = "id_dataset" onchange = "getDatasetDetail()">
+                    <select class = "form-control" id = "id_dataset" onchange = "getDatasetDetail()" data-plugin = "select2">
                         <option value = "0">Choose Dataset</option>
                         <?php for($a = 0; $a<count($dataset_list); $a++):?>
                             <option value = "<?php echo $dataset_list[$a]["id_entity_combination"];?>"><?php echo $dataset_list[$a]["dataset_name"];?> / <?php echo $dataset_list[$a]["dataset_key"];?></option>

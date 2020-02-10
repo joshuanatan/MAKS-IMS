@@ -233,7 +233,6 @@ class Endpoint extends CI_Controller{
                     "msg" => "TOKEN IS NOT ACTIVE / UNABLE TO RECOGNIZE TOKEN",
                     "dataset_result" => "-"
                 );
-                log_endpoint($headers["client-token"],get1Value("endpoint_documentation","endpoint_token",array("endpoint_name" => "get_dataset")),"error","TOKEN IS NOT RECOGNIZED / NO PRIVILEGE IS GRANTED / ENDPOINT INACTIVE");
             }
         }
         else{
@@ -243,7 +242,6 @@ class Endpoint extends CI_Controller{
                 "msg" => "TOKEN IS REQUIRED",
                 "dataset_result" => "-"
             );
-            log_endpoint("-",get1Value("endpoint_documentation","endpoint_token",array("endpoint_name" => "get_dataset")),"error","CLIENT TOKEN IS NOT PROVIDED");
         }
         header("Content-type:application/json");
         echo json_encode($data);
